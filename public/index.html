@@ -3,647 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Money Movement Assessment</title>
+    <title>Money Movement Assessment | Wealth Architecture</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;circle cx='50' cy='50' r='45' fill='%23ff8120'/&gt;&lt;path d='M25 52 L42 69 L75 36' stroke='white' stroke-width='10' fill='none' stroke-linecap='round' stroke-linejoin='round'/&gt;&lt;/svg&gt;">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 650px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            padding: 50px 40px;
-            text-align: center;
-            color: white;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .header p {
-            font-size: 14px;
-            color: #cccccc;
-            line-height: 1.5;
-        }
-
-        .step {
-            display: none;
-            padding: 40px;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        .step.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .progress-bar {
-            background: #f0f0f0;
-            height: 4px;
-            width: 100%;
-        }
-
-        .progress {
-            background: #ff8120;
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-
-        .step-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="number"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="number"]:focus,
-        select:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #ff8120;
-            box-shadow: 0 0 0 3px rgba(255, 129, 32, 0.1);
-        }
-
-        .checkbox-group,
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .checkbox-item,
-        .radio-item {
-            display: flex;
-            align-items: center;
-        }
-
-        input[type="checkbox"],
-        input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            margin-right: 10px;
-            cursor: pointer;
-            accent-color: #ff8120;
-        }
-
-        .checkbox-item label,
-        .radio-item label {
-            margin: 0;
-            font-weight: 400;
-            cursor: pointer;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 40px;
-        }
-
-        button {
-            flex: 1;
-            padding: 14px 24px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: #ff8120;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #e67019;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 129, 32, 0.3);
-        }
-
-        .btn-primary:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #1a1a1a;
-        }
-
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
-        .results {
-            display: none;
-            text-align: center;
-            padding: 60px 40px;
-        }
-
-        .results.active {
-            display: block;
-        }
-
-        .score-display {
-            font-size: 72px;
-            font-weight: 700;
-            color: #ff8120;
-            margin-bottom: 20px;
-        }
-
-        .results h2 {
-            font-size: 24px;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-        }
-
-        .results p {
-            font-size: 15px;
-            color: #666;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .btn-view-report {
-            background: #ff8120;
-            color: white;
-            padding: 14px 30px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-block;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .btn-view-report:hover {
-            background: #e67019;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 129, 32, 0.3);
-        }
-
-        .info-badge {
-            background: #fffaf5;
-            border-left: 4px solid #ff8120;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 25px;
-            font-size: 13px;
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .spinner {
-            border: 4px solid #f0f0f0;
-            border-top: 4px solid #ff8120;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .success-message {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .error-message {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; background: #f9f9f9; color: #1a1a1a; min-height: 100vh; padding: 20px; }
+        .page-wrapper { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; min-height: 100vh; }
+        .sr-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 129, 32, 0.3); }
+        .sr-header-left { display: flex; align-items: center; gap: 15px; }
+        .sr-logo { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+        .sr-logo span { color: #ff8120; }
+        .sr-tagline { font-size: 15px; color: #666; }
+        .sr-header-right { display: flex; align-items: center; gap: 12px; }
+        .sr-presenter { font-size: 10px; color: #666; font-weight: 500; }
+        .sr-presenter-photo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #ff8120; }
+        .main-content { flex: 1; }
+        .assessment-container { max-width: 650px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); overflow: hidden; }
+        .assessment-header { background: linear-gradient(135deg, #ff8120 0%, #e06b10 100%); padding: 50px 40px; text-align: center; color: white; }
+        .assessment-header h1 { font-size: 28px; margin-bottom: 10px; font-weight: 700; }
+        .assessment-header p { font-size: 14px; color: rgba(255, 255, 255, 0.9); line-height: 1.5; }
+        .progress-bar { background: #f0f0f0; height: 4px; width: 100%; }
+        .progress { background: #ff8120; height: 100%; transition: width 0.3s ease; }
+        .assessment-body { padding: 40px; }
+        .step { display: none; animation: fadeIn 0.3s ease-in; }
+        .step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .step-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 30px; }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; font-size: 15px; font-weight: 500; color: #1a1a1a; margin-bottom: 12px; }
+        .radio-group { display: flex; flex-direction: column; gap: 12px; }
+        .radio-option { display: flex; align-items: flex-start; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; }
+        .radio-option:hover { border-color: #ff8120; background-color: rgba(255, 129, 32, 0.05); }
+        .radio-option input[type="radio"] { margin-right: 12px; margin-top: 3px; cursor: pointer; accent-color: #ff8120; }
+        .radio-label { display: flex; flex-direction: column; cursor: pointer; font-size: 14px; color: #333; line-height: 1.4; }
+        .button-group { display: flex; gap: 12px; margin-top: 30px; justify-content: space-between; }
+        button { padding: 12px 30px; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .btn-next { background: linear-gradient(135deg, #ff8120 0%, #e06b10 100%); color: white; flex: 1; }
+        .btn-next:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 129, 32, 0.3); }
+        .btn-prev { background: #f0f0f0; color: #1a1a1a; }
+        .btn-prev:hover { background: #e0e0e0; }
+        .results { text-align: center; padding: 40px; }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #ff8120 0%, #e06b10 100%); color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 48px; font-weight: 700; }
+        .score-label { font-size: 24px; font-weight: 700; color: #1a1a1a; margin-bottom: 15px; }
+        .score-interpretation { font-size: 15px; color: #333; line-height: 1.6; margin-bottom: 20px; padding: 20px; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #ff8120; }
+        .success-message { color: #10b981; font-weight: 600; margin-bottom: 20px; font-size: 16px; }
+        .footer { padding: 30px 40px; text-align: center; font-size: 12px; color: #999; line-height: 1.6; border-top: 1px solid #e0e0e0; margin-top: 30px; }
+        .footer strong { color: #666; }
+        .disclaimer { max-width: 650px; margin: 20px auto 0; padding: 20px; background: #fff; border-radius: 12px; font-size: 11px; color: #999; line-height: 1.5; border: 1px solid #e0e0e0; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
-        </div>
-
-        <div class="header">
-            <h1>Money Movement Assessment</h1>
-            <p>Assess how effectively money flows and multiplies through your business</p>
-        </div>
-
-        <!-- STEP 1: INTRO -->
-        <div class="step active" data-step="1">
-            <div class="step-title">Reveal Your Money Movement Score</div>
-            <div class="info-badge">
-                This 2-minute assessment evaluates how money flows through your business, from revenue allocation to profit retention. Your honest answers help us identify cash flow gaps and profit multiplication opportunities.
+    <div class="page-wrapper">
+        <header class="sr-header">
+            <div class="sr-header-left">
+                <div class="sr-logo"><span>✓</span> Success Resources</div>
+                <div style="font-size: 15px; color: #999;">|</div>
+                <div class="sr-tagline">Your Learning Partner</div>
             </div>
-            <p style="font-size: 15px; color: #666; line-height: 1.6; margin-bottom: 30px;">
-                <strong>What you'll discover:</strong><br>
-                • How much profit you're actually keeping vs earning<br>
-                • Your cash flow management efficiency<br>
-                • Capital deployment strategy maturity<br>
-                • Your personalized Money Movement blueprint
-            </p>
-            <div class="button-group">
-                <button class="btn-primary" onclick="nextStep()">Start Assessment</button>
+            <div class="sr-header-right">
+                <div class="sr-presenter">Presented by June Yoon</div>
+                <img src="https://avatars.githubusercontent.com/u/49814981?v=4" alt="June Yoon" class="sr-presenter-photo">
             </div>
-        </div>
+        </header>
 
-        <!-- STEP 2: CASH FLOW & ALLOCATION -->
-        <div class="step" data-step="2">
-            <div class="step-title">Your Cash Flow & Allocation</div>
+        <div class="main-content">
+            <div class="assessment-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progressBar"></div>
+                </div>
 
-            <div class="form-group">
-                <label>How do you currently allocate incoming revenue?</label>
-                <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="radio" id="allocate1" name="allocate" value="8" />
-                        <label for="allocate1">I spend money as it comes in (no system)</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="allocate2" name="allocate" value="16" />
-                        <label for="allocate2">I set aside some for taxes and operating costs</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="allocate3" name="allocate" value="25" />
-                        <label for="allocate3">I use a systematic allocation system (buckets/percentages)</label>
-                    </div>
+                <div class="assessment-header">
+                    <h1>Money Movement Assessment</h1>
+                    <p>Discover your profit management strategy and cash flow patterns</p>
+                </div>
+
+                <div class="assessment-body">
+                    <form id="assessmentForm">
+                        <div class="step active" id="step1">
+                            <h2 class="step-title">Question 1 of 5</h2>
+                            <div class="form-group">
+                                <label>How do you allocate revenue in your business?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q1_1" name="Money_Q1_RevenueAllocation" value="Spend-all-revenue">
+                                        <label for="q1_1" class="radio-label"><strong>Spend-all-revenue</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Most revenue goes to expenses and payroll</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q1_2" name="Money_Q1_RevenueAllocation" value="Profit-mindful">
+                                        <label for="q1_2" class="radio-label"><strong>Profit-mindful</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">I set aside profit from revenue intentionally</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q1_3" name="Money_Q1_RevenueAllocation" value="Strategic-allocation">
+                                        <label for="q1_3" class="radio-label"><strong>Strategic-allocation</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Profit-first system with strategic reinvestment</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step" id="step2">
+                            <h2 class="step-title">Question 2 of 5</h2>
+                            <div class="form-group">
+                                <label>What percentage of profit do you retain?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q2_1" name="Money_Q2_ProfitRetention" value="Below-10%">
+                                        <label for="q2_1" class="radio-label"><strong>Below 10%</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Most profits are spent or reinvested immediately</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q2_2" name="Money_Q2_ProfitRetention" value="10-25%">
+                                        <label for="q2_2" class="radio-label"><strong>10-25%</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">I save some profit but reinvest most</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q2_3" name="Money_Q2_ProfitRetention" value="Above-25%">
+                                        <label for="q2_3" class="radio-label"><strong>Above 25%</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">I retain significant profit for growth</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step" id="step3">
+                            <h2 class="step-title">Question 3 of 5</h2>
+                            <div class="form-group">
+                                <label>How do you approach tax planning?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q3_1" name="Money_Q3_TaxPlanning" value="Reactive-filing">
+                                        <label for="q3_1" class="radio-label"><strong>Reactive-filing</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">File taxes when due, minimal planning</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q3_2" name="Money_Q3_TaxPlanning" value="Quarterly-review">
+                                        <label for="q3_2" class="radio-label"><strong>Quarterly-review</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Monitor taxes quarterly with professional help</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q3_3" name="Money_Q3_TaxPlanning" value="Strategic-planning">
+                                        <label for="q3_3" class="radio-label"><strong>Strategic-planning</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Year-round tax optimization strategy</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step" id="step4">
+                            <h2 class="step-title">Question 4 of 5</h2>
+                            <div class="form-group">
+                                <label>How do you manage reinvestment?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q4_1" name="Money_Q4_ReinvestmentStrategy" value="Minimal-reinvestment">
+                                        <label for="q4_1" class="radio-label"><strong>Minimal-reinvestment</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Small incremental improvements only</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q4_2" name="Money_Q4_ReinvestmentStrategy" value="Growth-focused">
+                                        <label for="q4_2" class="radio-label"><strong>Growth-focused</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Reinvest for business expansion</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q4_3" name="Money_Q4_ReinvestmentStrategy" value="Multi-stream-building">
+                                        <label for="q4_3" class="radio-label"><strong>Multi-stream-building</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Build new income streams with profits</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step" id="step5">
+                            <h2 class="step-title">Question 5 of 5</h2>
+                            <div class="form-group">
+                                <label>What's your biggest financial concern?</label>
+                                <div class="radio-group">
+                                    <div class="radio-option">
+                                        <input type="radio" id="q5_1" name="Money_Q5_FinancialConcerns" value="Cash-flow-control">
+                                        <label for="q5_1" class="radio-label"><strong>Cash-flow-control</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Managing day-to-day cash flow</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q5_2" name="Money_Q5_FinancialConcerns" value="Profit-optimization">
+                                        <label for="q5_2" class="radio-label"><strong>Profit-optimization</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Maximizing profit margins</span></label>
+                                    </div>
+                                    <div class="radio-option">
+                                        <input type="radio" id="q5_3" name="Money_Q5_FinancialConcerns" value="Wealth-acceleration">
+                                        <label for="q5_3" class="radio-label"><strong>Wealth-acceleration</strong><span style="font-size: 12px; color: #999; margin-top: 4px;">Growing wealth faster than business income</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step" id="results">
+                            <div class="results">
+                                <div class="success-message">✓ Assessment Complete</div>
+                                <div class="score-circle" id="scoreDisplay">-</div>
+                                <div class="score-label">Your Money Movement Score</div>
+                                <div class="score-interpretation" id="interpretation"></div>
+                                <p style="font-size: 13px; color: #999; margin-top: 20px;">Your detailed results have been saved. Check your email for next steps.</p>
+                            </div>
+                        </div>
+
+                        <div class="button-group" id="buttonGroup">
+                            <button type="button" class="btn-prev" id="prevBtn" onclick="changeStep(-1)" style="display:none;">← Back</button>
+                            <button type="button" class="btn-next" id="nextBtn" onclick="changeStep(1)">Next →</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="footer">
+                    <a href="https://www.millionairemindworld.com/sr" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;">CONTACT US</a> |
+                    <a href="https://docs.google.com/document/d/1WWRyCrQ9jwLe8NR4A270KG3Ggyrk1D4b7Sxud95sIYo/edit?tab=t.0" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;">PRIVACY POLICY</a> |
+                    <a href="https://docs.google.com/document/d/1KRQtEB5kVMEXTPBv_0IJW4sFa11wmoqM3FqyJNyKtOw/edit?tab=t.0#heading=h.nnnowla2e0uw" target="_blank" style="color: #666; text-decoration: none; font-weight: 500;">COOKIES POLICY</a><br>
+                    Copyright 2026 Success Resources © All Rights Reserved
                 </div>
             </div>
-
-            <div class="form-group">
-                <label>What percentage of revenue do you typically keep as owner profit?</label>
-                <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="radio" id="profit1" name="profit" value="8" />
-                        <label for="profit1">Less than 10% (uncertain about actual numbers)</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="profit2" name="profit" value="16" />
-                        <label for="profit2">10-25% (I have some clarity)</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="profit3" name="profit" value="25" />
-                        <label for="profit3">25%+ (I have a clear profit system)</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Do you regularly get surprised by tax bills?</label>
-                <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="radio" id="tax1" name="tax" value="10" />
-                        <label for="tax1">Yes, frequently (no tax planning)</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="tax2" name="tax" value="18" />
-                        <label for="tax2">Sometimes (reactive planning)</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="tax3" name="tax" value="25" />
-                        <label for="tax3">No, I plan proactively (strategic tax management)</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-group">
-                <button class="btn-secondary" onclick="prevStep()">Back</button>
-                <button class="btn-primary" onclick="nextStep()">Continue</button>
-            </div>
-        </div>
-
-        <!-- STEP 3: CAPITAL & GROWTH -->
-        <div class="step" data-step="3">
-            <div class="step-title">Your Capital & Growth Strategy</div>
-
-            <div class="form-group">
-                <label>How do you view reinvestment in your business?</label>
-                <div class="radio-group">
-                    <div class="radio-item">
-                        <input type="radio" id="reinvest1" name="reinvest" value="8" />
-                        <label for="reinvest1">I reinvest everything; there's nothing left for personal wealth</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="reinvest2" name="reinvest" value="16" />
-                        <label for="reinvest2">I reinvest some, keep some for myself</label>
-                    </div>
-                    <div class="radio-item">
-                        <input type="radio" id="reinvest3" name="reinvest" value="25" />
-                        <label for="reinvest3">I have a strategic reinvestment plan that scales both business and personal wealth</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Which of these financial challenges concern you most?</label>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="concern1" name="concerns" value="5" />
-                        <label for="concern1">Cash flow management / unpredictable income</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="concern2" name="concerns" value="5" />
-                        <label for="concern2">Tax optimization and planning</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="concern3" name="concerns" value="5" />
-                        <label for="concern3">Capital deployment and investment strategy</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="concern4" name="concerns" value="5" />
-                        <label for="concern4">Profit extraction and personal wealth building</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="button-group">
-                <button class="btn-secondary" onclick="prevStep()">Back</button>
-                <button class="btn-primary" onclick="nextStep()">Continue</button>
-            </div>
-        </div>
-
-        <!-- STEP 4: PERSONAL INFO -->
-        <div class="step" data-step="4">
-            <div class="step-title">Your Contact Information</div>
-
-            <div class="error-message" id="errorMessage"></div>
-
-            <div class="form-group">
-                <label>First Name *</label>
-                <input type="text" id="firstName" required />
-            </div>
-
-            <div class="form-group">
-                <label>Last Name *</label>
-                <input type="text" id="lastName" required />
-            </div>
-
-            <div class="form-group">
-                <label>Email Address *</label>
-                <input type="email" id="email" required />
-            </div>
-
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="text" id="phone" />
-            </div>
-
-            <div class="button-group">
-                <button class="btn-secondary" onclick="prevStep()">Back</button>
-                <button class="btn-primary" id="submitBtn" onclick="calculateScore()">View My Score</button>
-            </div>
-        </div>
-
-        <!-- LOADING STATE -->
-        <div class="loading-spinner" id="loadingSpinner">
-            <div class="spinner"></div>
-            <p>Processing your assessment...</p>
-        </div>
-
-        <!-- RESULTS -->
-        <div class="results" id="results">
-            <div class="success-message" id="successMessage"></div>
-            <div class="score-display" id="scoreDisplay">0</div>
-            <h2 id="scoreTitle">Your Money Movement Score</h2>
-            <p id="scoreDescription"></p>
-            <a href="https://indentity-score-result.vercel.app/?score=SCORE_PLACEHOLDER" class="btn-view-report" id="viewReportBtn">View Your Full Report →</a>
         </div>
     </div>
 
+    <div class="disclaimer">
+        <strong>Disclaimer:</strong> This assessment is for educational purposes only and does not constitute financial, legal, or investment advice. Results are based on self-reported information and should not be used as the sole basis for financial decisions. Consult with qualified financial, legal, or investment professionals before making any decisions. Success Resources and June Yoon are not liable for any financial, legal, or other outcomes resulting from your use of this assessment.
+    </div>
+
     <script>
-        // ===== ZAPIER WEBHOOK URL =====
         const ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/3435365/u7irc5p/";
-        // ===============================
-
         let currentStep = 1;
-        const totalSteps = 4;
+        const totalSteps = 5;
 
-        function getEmailFromURL() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('email') || '';
-        }
+        const scoreMap = { "Spend-all-revenue": 10, "Profit-mindful": 20, "Strategic-allocation": 30 };
+        const scoreMap2 = { "Below-10%": 10, "10-25%": 20, "Above-25%": 30 };
+        const scoreMap3 = { "Reactive-filing": 10, "Quarterly-review": 20, "Strategic-planning": 30 };
+        const scoreMap4 = { "Minimal-reinvestment": 10, "Growth-focused": 20, "Multi-stream-building": 30 };
+        const scoreMap5 = { "Cash-flow-control": 10, "Profit-optimization": 20, "Wealth-acceleration": 30 };
 
-        function updateProgress() {
-            const progress = (currentStep / totalSteps) * 100;
-            document.getElementById('progress').style.width = progress + '%';
-        }
-
+        function updateProgress() { document.getElementById('progressBar').style.width = Math.min((currentStep - 1) / totalSteps * 100, 100) + '%'; }
         function showStep(step) {
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            document.querySelector(`[data-step="${step}"]`).classList.add('active');
+            document.getElementById('step' + step).classList.add('active');
+            document.getElementById('prevBtn').style.display = step > 1 ? 'block' : 'none';
+            document.getElementById('nextBtn').textContent = step === totalSteps ? 'Submit' : 'Next →';
             updateProgress();
-            window.scrollTo(0, 0);
         }
-
-        function nextStep() {
-            if (currentStep < totalSteps) {
+        function changeStep(direction) {
+            if (direction === 1 && currentStep < totalSteps) {
+                const fieldName = ['Money_Q1_RevenueAllocation', 'Money_Q2_ProfitRetention', 'Money_Q3_TaxPlanning', 'Money_Q4_ReinvestmentStrategy'][currentStep - 1];
+                if (!document.querySelector(`input[name="${fieldName}"]:checked`)) { alert('Please select an option before continuing.'); return; }
                 currentStep++;
                 showStep(currentStep);
-            }
+            } else if (direction === 1 && currentStep === totalSteps) {
+                if (!document.querySelector('input[name="Money_Q5_FinancialConcerns"]:checked')) { alert('Please select an option before submitting.'); return; }
+                submitAssessment();
+            } else if (direction === -1 && currentStep > 1) { currentStep--; showStep(currentStep); }
         }
+        function submitAssessment() {
+            const q1 = scoreMap[document.querySelector('input[name="Money_Q1_RevenueAllocation"]:checked')?.value] || 0;
+            const q2 = scoreMap2[document.querySelector('input[name="Money_Q2_ProfitRetention"]:checked')?.value] || 0;
+            const q3 = scoreMap3[document.querySelector('input[name="Money_Q3_TaxPlanning"]:checked')?.value] || 0;
+            const q4 = scoreMap4[document.querySelector('input[name="Money_Q4_ReinvestmentStrategy"]:checked')?.value] || 0;
+            const q5 = scoreMap5[document.querySelector('input[name="Money_Q5_FinancialConcerns"]:checked')?.value] || 0;
+            const score = q1 + q2 + q3 + q4 + q5;
 
-        function prevStep() {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        }
-
-        function calculateScore() {
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-
-            if (!firstName || !lastName || !email) {
-                showError('Please fill in all required fields.');
-                return;
-            }
-
-            if (!email.includes('@')) {
-                showError('Please enter a valid email address.');
-                return;
-            }
-
-            // Calculate Money Movement Score
-            let score = 0;
-
-            const allocateValue = parseInt(document.querySelector('input[name="allocate"]:checked')?.value || 0);
-            const profitValue = parseInt(document.querySelector('input[name="profit"]:checked')?.value || 0);
-            const taxValue = parseInt(document.querySelector('input[name="tax"]:checked')?.value || 0);
-            const reinvestValue = parseInt(document.querySelector('input[name="reinvest"]:checked')?.value || 0);
-
-            const concernsChecked = document.querySelectorAll('input[name="concerns"]:checked').length;
-            const concernsValue = concernsChecked * 3;
-
-            score = allocateValue + profitValue + taxValue + reinvestValue + concernsValue;
-
-            showLoadingState();
-            sendToZapier(firstName, lastName, email, phone, score);
-        }
-
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
-
-        function showLoadingState() {
-            document.querySelector('[data-step="4"]').style.display = 'none';
-            document.getElementById('loadingSpinner').style.display = 'block';
-        }
-
-        function sendToZapier(firstName, lastName, email, phone, score) {
-            const payload = {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                phone: phone,
-                assessmentType: 'Money Movement',
-                pillarScore: score,
-                answers: {
-                    allocate: document.querySelector('input[name="allocate"]:checked')?.value,
-                    profit: document.querySelector('input[name="profit"]:checked')?.value,
-                    tax: document.querySelector('input[name="tax"]:checked')?.value,
-                    reinvest: document.querySelector('input[name="reinvest"]:checked')?.value,
-                    concerns: Array.from(document.querySelectorAll('input[name="concerns"]:checked')).map(cb => cb.nextElementSibling.textContent)
-                },
-                timestamp: new Date().toISOString()
-            };
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email') || 'not-provided@example.com';
 
             fetch(ZAPIER_WEBHOOK_URL, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(response => {
-                if (response.ok) {
-                    showResults(score);
-                } else {
-                    throw new Error('Failed to submit assessment');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showResults(score);
-            });
-        }
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email, firstName: email.split('@')[0], lastName: '',
+                    Money_Q1_RevenueAllocation: document.querySelector('input[name="Money_Q1_RevenueAllocation"]:checked')?.value || '',
+                    Money_Q2_ProfitRetention: document.querySelector('input[name="Money_Q2_ProfitRetention"]:checked')?.value || '',
+                    Money_Q3_TaxPlanning: document.querySelector('input[name="Money_Q3_TaxPlanning"]:checked')?.value || '',
+                    Money_Q4_ReinvestmentStrategy: document.querySelector('input[name="Money_Q4_ReinvestmentStrategy"]:checked')?.value || '',
+                    Money_Q5_FinancialConcerns: document.querySelector('input[name="Money_Q5_FinancialConcerns"]:checked')?.value || '',
+                    Money_Score: score
+                })
+            }).catch(err => console.log('Webhook submitted'));
 
-        function showResults(score) {
-            document.getElementById('loadingSpinner').style.display = 'none';
+            let interpretation = score <= 50 ? '<strong>Cash Flow Focused</strong><br>You prioritize managing current cash flow. Focus on profit optimization and retention.' : score <= 100 ? '<strong>Profit Building</strong><br>You\'re building profitability systematically. Work on strategic reinvestment.' : '<strong>Wealth Scaling</strong><br>You\'re scaling wealth strategically. Focus on multi-stream income.';
+
+            document.getElementById('scoreDisplay').textContent = score;
+            document.getElementById('interpretation').innerHTML = interpretation;
+            document.getElementById('buttonGroup').style.display = 'none';
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
             document.getElementById('results').classList.add('active');
-            document.getElementById('scoreDisplay').textContent = score;
-
-            let title = '';
-            let description = '';
-
-            if (score < 40) {
-                title = 'Unconscious Cash Handler';
-                description = 'Money flows through your business without a system. You\'re reactive to cash, taxes, and spending. The breakthrough opportunity: implement basic money allocation buckets and gain visibility into profit retention.';
-            } else if (score < 70) {
-                title = 'Emerging Money Architect';
-                description = 'You\'re building awareness of money systems and have some allocation structure in place. Tax planning is becoming part of your thinking. Next level: formalize your Money Movement OS with clear percentages and strategic capital deployment.';
-            } else {
-                title = 'Money Movement Master';
-                description = 'You have a systematic approach to revenue allocation, tax planning, and capital deployment. Money flows with intention. The next evolution: scale the system and use it as a foundation for multi-year wealth multiplication strategy.';
-            }
-
-            document.getElementById('scoreTitle').textContent = title;
-            document.getElementById('scoreDescription').textContent = description;
-            document.getElementById('successMessage').textContent = `✓ Your assessment has been recorded and synced to your account.`;
-            document.getElementById('successMessage').style.display = 'block';
-            document.getElementById('viewReportBtn').href = `https://indentity-score-result.vercel.app/?score=${score}`;
-
-            window.scrollTo(0, 0);
+            updateProgress();
         }
 
-        window.addEventListener('load', function() {
-            const urlEmail = getEmailFromURL();
-            if (urlEmail) {
-                // Pre-fill if needed
-            }
-        });
-
-        updateProgress();
+        showStep(1);
     </script>
 </body>
 </html>
